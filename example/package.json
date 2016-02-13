@@ -18,7 +18,10 @@
     "express-force-ssl": "0.3.0",
     "express-session": "1.13.0",
     "connect-flash": "0.1.1",
-    "express-ejs-layouts": "2.0.0"
+    "express-ejs-layouts": "2.0.0",
+    "mongoose": "4.4.2",
+    "mongojs": "2.3.0",
+    "connect-mongo": "1.1.0"
   },
   "devDependencies": {
     "gulp": "3.9.0",
