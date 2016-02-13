@@ -1,0 +1,4 @@
+default:
+  dbUri: 'mongodb://localhost/express-server-dev'
+test:
+  dbUri: 'mongodb://localhost/express-server-test'

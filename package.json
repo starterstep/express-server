@@ -1,0 +1,27 @@
+{
+  "name": "express-server",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "server": "cd example && node server",
+    "console": "cd example && node console",
+    "test": "cd example && npm run test"
+  },
+  "dependencies": {
+    "mongoose": "4.4.2",
+    "mongojs": "2.3.0",
+    "ejs": "2.4.1",
+    "underscore": "1.8.3",
+    "underscore.string": "3.2.3",
+    "yaml-config": "0.3.0",
+    "express": "4.13.3",
+    "connect-mongo": "1.1.0",
+    "moment": "2.11.2"
+  },
+  "devDependencies": {
+    "gulp": "3.9.0",
+    "gulp-mocha": "2.2.0",
+    "should": "8.2.1",
+    "yargs": "3.32.0"
+  }
+}
