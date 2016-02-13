@@ -8,5 +8,4 @@ module.exports = function(context) {
             url: context.config.dbUri
         })
     }));
-    console.log('Loaded Session');
 };

@@ -7,5 +7,4 @@ module.exports = function(context) {
         res.locals.error_messages = req.flash('error_messages');
         next();
     });
-    console.log('Loaded Flash');
 };
