@@ -1,7 +1,6 @@
 {
   "name": "express-server",
   "version": "0.0.1",
-  "private": true,
   "scripts": {
     "server": "cd example && node server",
     "console": "cd example && node console",
