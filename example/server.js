@@ -1,6 +1,6 @@
 require('../')().load({
     settings: {
-        include: ['index', 'session']
+        include: ['server', 'session']
     },
     db: {
         exclude: ['mongojs']
