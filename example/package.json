@@ -6,7 +6,6 @@
     "test": "gulp mocha"
   },
   "dependencies": {
-    "longjohn": "0.2.11",
     "morgan": "1.6.1",
     "express-session": "1.13.0",
     "body-parser": "1.14.2",

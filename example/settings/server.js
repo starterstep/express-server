@@ -1,10 +1,6 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-if (process.env.NODE_ENV === 'development') {
-    require('longjohn');
-}
-
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
