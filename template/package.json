@@ -1,0 +1,17 @@
+{
+  "name": "express-server-template",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "test": "gulp mocha"
+  },
+  "dependencies": {
+    "express-server": "git://github.com/starterstep/express-server.git"
+  },
+  "devDependencies": {
+    "gulp": "3.9.0",
+    "gulp-mocha": "2.2.0",
+    "should": "8.2.1",
+    "yargs": "3.32.0"
+  }
+}
