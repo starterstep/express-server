@@ -29,6 +29,7 @@ module.exports = function(dirs) {
         var process = function(path) {
             if (compile) {
                 return compileDirectory.compile({
+                    object: $[name],
                     path: path,
                     include: include,
                     exclude: exclude
@@ -36,12 +37,14 @@ module.exports = function(dirs) {
             }
             if (yaml) {
                 return loadYamlDirectory.load({
+                    object: $[name],
                     path: path,
                     include: include,
                     exclude: exclude
                 });
             }
             return loadDirectory($).load({
+                object: $[name],
                 path: path,
                 include: include,
                 exclude: exclude
@@ -52,7 +55,7 @@ module.exports = function(dirs) {
             _.each(dirs, function(dir) {
                 var path = dir + '/' + name;
                 if (fs.existsSync(path)) {
-                    _.extend($[name], process(path));
+                    process(path);
                 }
             });
             if ($[name].index) {
