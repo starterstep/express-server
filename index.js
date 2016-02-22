@@ -24,7 +24,7 @@ module.exports = function(dirs) {
         var exclude = params.exclude;
         var times = params.times || 1;
 
-        $[name] = {};
+        $[name] = $[name] || {};
 
         var process = function(path) {
             if (compile) {
