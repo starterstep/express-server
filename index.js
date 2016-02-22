@@ -24,7 +24,7 @@ module.exports = function(dirs) {
         var exclude = params.exclude;
         var times = params.times || 1;
 
-        $[name] = $[name] || {};
+        $[name] = {};
 
         var process = function(path) {
             if (compile) {
@@ -52,13 +52,24 @@ module.exports = function(dirs) {
         };
 
         var load = function() {
+            var indexes = [];
             _.each(dirs, function(dir) {
                 var path = dir + '/' + name;
                 if (fs.existsSync(path)) {
                     process(path);
+                    if ($[name].index) {
+                        indexes.push($[name].index);
+                    }
                 }
             });
-            if ($[name].index) {
+            if (indexes.length) {
+                _.each(indexes, function(index, count) {
+                    if (count === 0) {
+                        $[name].index = index;
+                    } else {
+                        _.extend($[name].index, index);
+                    }
+                });
                 var index = $[name].index;
                 delete $[name].index;
                 $[name] = _.extend(index, $[name]);
