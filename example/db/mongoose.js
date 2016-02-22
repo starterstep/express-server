@@ -7,6 +7,5 @@ module.exports = function(context) {
         mongoose.set('debug', true);
     }
 
-    console.log('Loaded Mongoose: ' + context.config.dbUri);
     return mongoose;
 };

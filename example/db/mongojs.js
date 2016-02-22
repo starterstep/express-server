@@ -5,6 +5,5 @@ module.exports = function(context) {
         console.error('Mongojs Error: ', err);
     });
 
-    console.log('Loaded Mongojs: ' + context.config.dbUri);
     return mongojs;
 };
