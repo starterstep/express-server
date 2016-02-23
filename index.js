@@ -114,6 +114,11 @@ module.exports = function(dirs) {
             compile: true
         }, options.templates));
 
+        //schemas
+        processDirectory(_.extend({
+            name: 'schemas'
+        }, options.schemas));
+
         //models
         processDirectory(_.extend({
             name: 'models'
