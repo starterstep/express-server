@@ -97,6 +97,12 @@ module.exports = function(dirs) {
             name: 'db'
         }, options.db));
 
+        //templates
+        processDirectory(_.extend({
+            name: 'templates',
+            compile: true
+        }, options.templates));
+
         //lib
         processDirectory(_.extend({
             name: 'lib',
@@ -107,12 +113,6 @@ module.exports = function(dirs) {
         processDirectory(_.extend({
             name: 'settings'
         }, options.settings));
-
-        //templates
-        processDirectory(_.extend({
-            name: 'templates',
-            compile: true
-        }, options.templates));
 
         //schemas
         processDirectory(_.extend({
