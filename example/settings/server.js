@@ -10,28 +10,28 @@ var multer = require('multer');
 var errorhandler = require('errorhandler');
 
 module.exports = function(context) {
-    var app = context.app;
+    var server = context.server;
     var express = context.express;
     
-    app.set('case sensitive routing', true);
-    app.set('port', process.env.PORT || 3000);
-    app.set('views', ['./views']);
-    app.set('view engine', 'ejs');
-    app.use(express.static('./public'));
-    app.use(favicon('./public/favicon.ico'));
-    app.use(logger('common'));
-    app.use(methodOverride());
-    app.use(bodyParser.json());
-    app.use(bodyParser.text({
+    server.set('case sensitive routing', true);
+    server.set('port', process.env.PORT || 3000);
+    server.set('views', ['./views']);
+    server.set('view engine', 'ejs');
+    server.use(express.static('./public'));
+    server.use(favicon('./public/favicon.ico'));
+    server.use(logger('common'));
+    server.use(methodOverride());
+    server.use(bodyParser.json());
+    server.use(bodyParser.text({
         type:'text/xml'
     }));
-    app.use(bodyParser.urlencoded({
+    server.use(bodyParser.urlencoded({
         extended: true
     }));
-    app.use(multer().single());
-    app.use(cookieParser());
+    server.use(multer().single());
+    server.use(cookieParser());
 
     if (process.env.NODE_ENV === 'development') {
-        app.use(errorhandler());
+        server.use(errorhandler());
     }
 };

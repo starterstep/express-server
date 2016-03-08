@@ -1,3 +1,3 @@
 module.exports = function(context) {
-    context.app.use(require('express-ejs-layouts'));
+    context.server.use(require('express-ejs-layouts'));
 };

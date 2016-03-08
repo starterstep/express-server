@@ -21,3 +21,7 @@ module.exports = function(context) {
 
     return $;
 };
+
+exports.load = function(context) {
+
+};

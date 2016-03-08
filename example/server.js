@@ -5,4 +5,4 @@ require('../')().load({
     db: {
         exclude: ['mongojs']
     }
-}).server();
+}).start();

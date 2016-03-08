@@ -14,7 +14,7 @@ module.exports = function(dirs) {
     var $ = {};
 
     $.express = require('express');
-    $.app = $.express();
+    $.server = $.express();
 
     var processDirectory = function(params) {
         var name = params.name;
@@ -52,28 +52,12 @@ module.exports = function(dirs) {
         };
 
         var load = function() {
-            var indexes = [];
             _.each(dirs, function(dir) {
                 var path = dir + '/' + name;
                 if (fs.existsSync(path)) {
                     process(path);
-                    if ($[name].index) {
-                        indexes.push($[name].index);
-                    }
                 }
             });
-            if (indexes.length) {
-                _.each(indexes, function(index, count) {
-                    if (count === 0) {
-                        $[name].index = index;
-                    } else {
-                        _.extend($[name].index, index);
-                    }
-                });
-                var index = $[name].index;
-                delete $[name].index;
-                $[name] = _.extend(index, $[name]);
-            }
         };
 
         _.times(times, function() {
@@ -105,14 +89,18 @@ module.exports = function(dirs) {
 
         //lib
         processDirectory(_.extend({
-            name: 'lib',
-            times: 2
+            name: 'lib'
         }, options.lib));
 
         //settings
         processDirectory(_.extend({
             name: 'settings'
         }, options.settings));
+
+        //plugins
+        processDirectory(_.extend({
+            name: 'plugins'
+        }, options.plugins));
 
         //schemas
         processDirectory(_.extend({
@@ -126,8 +114,7 @@ module.exports = function(dirs) {
 
         //managers
         processDirectory(_.extend({
-            name: 'managers',
-            times: 2
+            name: 'managers'
         }, options.managers));
 
         //controllers
@@ -135,10 +122,12 @@ module.exports = function(dirs) {
             name: 'controllers'
         }, options.controllers));
 
-        //routes
-        $.router = $.express.Router();
-        $.app.use($.router);
+        //routers
+        processDirectory(_.extend({
+            name: 'routers'
+        }, options.routers));
 
+        //routes
         processDirectory(_.extend({
             name: 'routes'
         }, options.routes));
@@ -156,9 +145,9 @@ module.exports = function(dirs) {
         return $;
     };
 
-    $.server = function(callback) {
-        $.app.listen($.app.get('port'), function() {
-            console.log('express-server listening on port ' + $.app.get('port'));
+    $.start = function(callback) {
+        $.server.listen($.server.get('port'), function() {
+            console.log('express-server listening on port ' + $.server.get('port'));
             return callback && callback(null, $);
         });
         return $;

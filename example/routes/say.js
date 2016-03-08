@@ -1,5 +1,5 @@
 module.exports = function(context) {
-    var $ = context.router;
+    var $ = context.routers.server;
 
     var sayController = context.controllers.say;
 
