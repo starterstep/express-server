@@ -1,7 +1,7 @@
 var should = require('should');
 var fixture = require('./fixture');
 
-var sayManager = server.managers.say;
+var sayManager = require('../managers').say;
 
 describe("Hello World", function() {
 

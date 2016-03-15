@@ -1,11 +1,9 @@
-module.exports = function(context) {
-    var mongoose = require('mongoose');
+var config = require('../config');
 
-    mongoose.connect(context.config.server.dbUri);
+var $ = module.exports = require('mongoose');
 
-    if (process.env.NODE_ENV === 'development') {
-        mongoose.set('debug', true);
-    }
+$.connect(config.server.dbUri);
 
-    return mongoose;
-};
+if (process.env.NODE_ENV === 'development') {
+    $.set('debug', true);
+}

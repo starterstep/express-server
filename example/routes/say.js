@@ -1,7 +1,5 @@
-module.exports = function(context) {
-    var $ = context.routers.server;
+var $ = require('../routers').server;
 
-    var sayController = context.controllers.say;
+var sayController = require('../controllers').say;
 
-    $.get('/:word', sayController.word);
-};
+$.get('/:word', sayController.word);

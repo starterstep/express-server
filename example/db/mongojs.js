@@ -1,9 +1,7 @@
-module.exports = function(context) {
-    var mongojs = require('mongojs')(context.config.server.dbUri);
+var config = require('../config');
 
-    mongojs.on('error', function(err) {
-        console.error('Mongojs Error: ', err);
-    });
+var $ = module.exports = require('mongojs')(config.server.dbUri);
 
-    return mongojs;
-};
+$.on('error', function(err) {
+    console.error('Mongojs Error: ', err);
+});

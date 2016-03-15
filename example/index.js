@@ -1,4 +1,6 @@
-require('../')().load({
+var $ = module.exports = require('../')();
+
+$.load({
     settings: {
         include: ['server', 'session']
     },

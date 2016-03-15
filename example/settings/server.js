@@ -9,29 +9,28 @@ var favicon = require('serve-favicon');
 var multer = require('multer');
 var errorhandler = require('errorhandler');
 
-module.exports = function(context) {
-    var server = context.server;
-    var express = context.express;
-    
-    server.set('case sensitive routing', true);
-    server.set('port', process.env.PORT || 3000);
-    server.set('views', ['./views']);
-    server.set('view engine', 'ejs');
-    server.use(express.static('./public'));
-    server.use(favicon('./public/favicon.ico'));
-    server.use(logger('common'));
-    server.use(methodOverride());
-    server.use(bodyParser.json());
-    server.use(bodyParser.text({
-        type:'text/xml'
-    }));
-    server.use(bodyParser.urlencoded({
-        extended: true
-    }));
-    server.use(multer().single());
-    server.use(cookieParser());
+var context = require('../');
+var server = context.server;
+var express = context.express;
 
-    if (process.env.NODE_ENV === 'development') {
-        server.use(errorhandler());
-    }
-};
+server.set('case sensitive routing', true);
+server.set('port', process.env.PORT || 3000);
+server.set('views', ['./views']);
+server.set('view engine', 'ejs');
+server.use(express.static('./public'));
+server.use(favicon('./public/favicon.ico'));
+server.use(logger('common'));
+server.use(methodOverride());
+server.use(bodyParser.json());
+server.use(bodyParser.text({
+    type:'text/xml'
+}));
+server.use(bodyParser.urlencoded({
+    extended: true
+}));
+server.use(multer().single());
+server.use(cookieParser());
+
+if (process.env.NODE_ENV === 'development') {
+    server.use(errorhandler());
+}

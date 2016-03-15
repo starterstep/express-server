@@ -1,11 +1,7 @@
 var ps = require('child_process');
 
-module.exports = function(context) {
-    var $ = {};
+var $ = module.exports = {};
 
-    $.outloud = function(word) {
-        return ps.execSync('say "'+word+'"');
-    };
-
-    return $;
+$.outloud = function(word) {
+    return ps.execSync('say "'+word+'"');
 };

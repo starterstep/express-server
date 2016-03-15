@@ -43,6 +43,10 @@ module.exports = function(dirs) {
                     exclude: exclude
                 });
             }
+
+            exclude = exclude ||[];
+            exclude.push('index');
+
             return loadDirectory($).load({
                 object: $[name],
                 path: path,
@@ -86,6 +90,12 @@ module.exports = function(dirs) {
             name: 'templates',
             compile: true
         }, options.templates));
+
+        //views
+        processDirectory(_.extend({
+            name: 'views',
+            compile: true
+        }, options.views));
 
         //lib
         processDirectory(_.extend({

@@ -2,7 +2,7 @@
   "name": "express-server",
   "version": "0.0.1",
   "scripts": {
-    "server": "cd example && node server",
+    "server": "cd example && node index",
     "console": "cd example && node console",
     "test": "cd example && npm run test"
   },

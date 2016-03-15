@@ -1,27 +1,19 @@
-module.exports = function(context) {
-    var bus = context.lib.bus;
-    var say = context.lib.say;
-    var WordModel = context.models.word;
+var bus = require('../lib').bus;
+var say = require('../lib').say;
+var WordModel = require('../models').word;
 
-    var $ = {};
+var $ = module.exports = {};
 
-    $.word = function(word, callback) {
-        say.outloud(word);
+$.word = function(word, callback) {
+    say.outloud(word);
 
-        bus.emit('said', word);
+    bus.emit('said', word);
 
-        new WordModel({
-            word: word
-        }).save(callback);
-    };
-
-    $.removeAll = function(callback) {
-        WordModel.remove({}, callback);
-    };
-
-    return $;
+    new WordModel({
+        word: word
+    }).save(callback);
 };
 
-exports.load = function(context) {
-
+$.removeAll = function(callback) {
+    WordModel.remove({}, callback);
 };

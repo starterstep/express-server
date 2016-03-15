@@ -1,16 +1,12 @@
-module.exports = function(context) {
-    var $ = {};
+var $ = module.exports = {};
 
-    var responseHelper = context.lib.responseHelper;
-    var sayManager = context.managers.say;
+var responseHelper = require('../lib').responseHelper;
+var sayManager = require('../managers').say;
 
-    $.word = function(req, res) {
-        sayManager.word(req.params.word, function(err, result) {
-            responseHelper.render(err, 'say', {
-                word: result.word
-            }, res);
-        });
-    };
-
-    return $;
+$.word = function(req, res) {
+    sayManager.word(req.params.word, function(err, result) {
+        responseHelper.render(err, 'say', {
+            word: result.word
+        }, res);
+    });
 };

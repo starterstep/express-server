@@ -1,12 +1,10 @@
-module.exports = function(context) {
-    var mongoose = context.db.mongoose;
+var mongoose = require('../db').mongoose;
 
-    var Schema = mongoose.Schema;
-    var ObjectId = Schema.ObjectId;
+var Schema = mongoose.Schema;
+var ObjectId = Schema.ObjectId;
 
-    var WordSchema = new Schema({
-        word: { type: String, require: true }
-    });
+var WordSchema = new Schema({
+    word: { type: String, required: true }
+});
 
-    return WordSchema;
-};
+module.exports = WordSchema;

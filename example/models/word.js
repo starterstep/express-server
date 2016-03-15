@@ -1,6 +1,4 @@
-module.exports = function(context) {
-    var mongoose = context.db.mongoose;
-    var WordSchema = context.schemas.word;
+var mongoose = require('../db').mongoose;
+var WordSchema = require('../schemas').word;
 
-    return mongoose.model('Word', WordSchema);
-};
+module.exports = mongoose.model('Word', WordSchema);
