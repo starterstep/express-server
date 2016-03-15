@@ -10,6 +10,8 @@ module.exports = function(dirs) {
     if (!_.isArray(dirs)) {
         dirs = [dirs];
     }
+    dirs = _.uniq(dirs);
+    console.log('loading ', dirs);
 
     var $ = {};
 
