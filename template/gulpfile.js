@@ -3,7 +3,7 @@ var mocha = require('gulp-mocha');
 var argv = require('yargs').argv;
 
 gulp.task('mocha', function () {
-    require('./tests');
+    require('./test');
 
     var test = './tests/';
     test += argv.test && argv.test || '**/*test.js';
