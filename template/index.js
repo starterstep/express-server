@@ -1,3 +1,1 @@
-var $ = module.exports = require('express-server')();
-
-$.load().start();
+module.exports = require('express-server')();
