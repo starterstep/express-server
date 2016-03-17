@@ -113,8 +113,9 @@ module.exports = function($) {
     };
 
     $.load = function(baseDir) {
-        baseDir = baseDir || path.resolve(__dirname + '/../..');
+        baseDir = path.resolve(baseDir || (__dirname + '/../..'));
 
+        console.log('LOADING ', baseDir);
         _.each(map, function(moduleName) {
             var files = glob.sync(baseDir+'/'+moduleName+'/**/*{.js,.yaml,.ejs}', {
                 ignore: baseDir+'/'+moduleName+'/**/index.js'
