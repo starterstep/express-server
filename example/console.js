@@ -1,1 +1,1 @@
-require('./').load().console();
+require('./').load('.').console();

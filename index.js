@@ -1,153 +1,137 @@
-var loadDirectory = require('./lib/load-directory');
-var loadYamlDirectory = require('./lib/load-yaml-directory')();
-var compileDirectory = require('./lib/compile-directory')();
 var nodeConsole = require('./lib/node-console');
 var _ = require('underscore');
 var fs = require('fs');
+var glob = require('glob');
+var path = require('path');
+var s = require('underscore.string');
+var yamlConfig = require('yaml-config');
+var ejs = require('ejs');
 
-module.exports = function(dirs) {
-    dirs = dirs || process.cwd();
-    if (!_.isArray(dirs)) {
-        dirs = [dirs];
+
+module.exports = function($) {
+    $ = $ || {};
+
+    var map = ['config', 'db', 'templates', 'views', 'lib', 'settings', 'plugins', 'schemas', 'models', 'managers', 'controllers', 'routers', 'routes', 'events'];
+
+    if (!$.express) {
+        $.express = require('express');
     }
-    dirs = _.uniq(dirs);
-    console.log('loading ', dirs);
+    if (!$.server) {
+        $.server = $.express();
+    }
 
-    var $ = {};
+    var mapRequire = function(moduleName, files) {
+        var module = $[moduleName] || ($[moduleName] = {});
 
-    $.express = require('express');
-    $.server = $.express();
-
-    var processDirectory = function(params) {
-        var name = params.name;
-        var compile = params.compile;
-        var yaml = params.yaml;
-        var include = params.include;
-        var exclude = params.exclude;
-        var times = params.times || 1;
-
-        $[name] = {};
-
-        var process = function(path) {
-            if (compile) {
-                return compileDirectory.compile({
-                    object: $[name],
-                    path: path,
-                    include: include,
-                    exclude: exclude
-                });
+        var splitRefFile = function(ref, split, file) {
+            if (file.indexOf('.yaml') !== -1) {
+                ref[split] = ref[split] || {};
+                _.extend(ref[split], yamlConfig.readConfig(path.resolve(file)));
+            } else if (file.indexOf('.ejs') !== -1) {
+                var readFile = fs.readFileSync(path.resolve(file), {encoding: 'utf8'});
+                ref[split] = ejs.compile(readFile);
+            } else {
+                ref[split] = require(path.resolve(file));
             }
-            if (yaml) {
-                return loadYamlDirectory.load({
-                    object: $[name],
-                    path: path,
-                    include: include,
-                    exclude: exclude
-                });
-            }
-
-            exclude = exclude ||[];
-            exclude.push('index');
-
-            return loadDirectory($).load({
-                object: $[name],
-                path: path,
-                include: include,
-                exclude: exclude
-            });
         };
 
-        var load = function() {
-            _.each(dirs, function(dir) {
-                var path = dir + '/' + name;
-                if (fs.existsSync(path)) {
-                    process(path);
-                }
-            });
-        };
-
-        _.times(times, function() {
-            load();
+        _.each(files, function(name, file) {
+            var splits = name.split('/');
+            var ref = module;
+            if (splits.length > 1) {
+                _.each(splits, function(split, index) {
+                    split = s.camelize(split);
+                    if (index === splits.length - 1) {
+                        splitRefFile(ref, split, file);
+                    } else {
+                        ref = ref[split] || (ref[split] = {});
+                    }
+                });
+            } else {
+                var split = s.camelize(name);
+                splitRefFile(ref, split, file);
+            }
         });
-        console.log('loaded ' + name + ': ', _.keys($[name]));
-        return $[name];
+        console.log('loaded', moduleName, module);
     };
 
-    $.load = function(options) {
-        options = options || {};
+    var pathReduce = function(files) {
+        var keys, common, file;
 
-        //config
-        processDirectory(_.extend({
-            name: 'config',
-            yaml: true
-        }, options.config));
+        if (Object.keys(files).length === 1) {
+            file = Object.keys(files)[0];
+            files[file] = path.basename(file);
+            return files;
+        }
 
-        //db
-        processDirectory(_.extend({
-            name: 'db'
-        }, options.db));
+        keys = [];
+        for (var file in files) {
+            keys.push(files[file].split('/'));
+        }
 
-        //templates
-        processDirectory(_.extend({
-            name: 'templates',
-            compile: true
-        }, options.templates));
+        common = 0;
+        while(keys.every(function(key) {
+            return key[common] === keys[0][common];
+        })) {
+            common++;
+        }
+        common = keys[0].slice(0, common).join('/') + '/';
 
-        //views
-        processDirectory(_.extend({
-            name: 'views',
-            compile: true
-        }, options.views));
+        for (var file in files) {
+            files[file] = files[file].substring(common.length);
+        }
+        return files;
+    };
 
-        //lib
-        processDirectory(_.extend({
-            name: 'lib'
-        }, options.lib));
+    var stripExt = function(files) {
+        var filenames = Object.keys(files);
+        // contains map of stripped filenames
+        var conflicts = {};
+        for (var i=0, l=filenames.length; i<l; i++) {
+            (function(file, key) {
+                var newKey = key.substr(0, key.length - path.extname(key).length);
+                // if already file with same stripping
+                if (conflicts.hasOwnProperty(newKey)) {
+                    // check if first conflict
+                    if (conflicts[newKey] !== false) {
+                        // revert previous file stripping
+                        files[conflicts[newKey][0]] = conflicts[newKey][1];
+                        conflicts[newKey] = false;
+                    }
+                } else {
+                    // strip key
+                    files[file] = newKey;
+                    // remember for possible later conflicts
+                    conflicts[newKey] = [file, key];
+                }
+            })(filenames[i], files[filenames[i]]);
+        }
+        return files;
+    };
 
-        //settings
-        processDirectory(_.extend({
-            name: 'settings'
-        }, options.settings));
+    $.load = function(baseDir) {
+        baseDir = baseDir || '../..'
 
-        //plugins
-        processDirectory(_.extend({
-            name: 'plugins'
-        }, options.plugins));
+        _.each(map, function(moduleName) {
+            var files = glob.sync(baseDir+'/'+moduleName+'/**/*{.js,.yaml,.ejs}', {
+                ignore: baseDir+'/'+moduleName+'/**/index.js'
+            });
 
-        //schemas
-        processDirectory(_.extend({
-            name: 'schemas'
-        }, options.schemas));
+            if (!files.length) {
+                return;
+            }
 
-        //models
-        processDirectory(_.extend({
-            name: 'models'
-        }, options.models));
-
-        //managers
-        processDirectory(_.extend({
-            name: 'managers'
-        }, options.managers));
-
-        //controllers
-        processDirectory(_.extend({
-            name: 'controllers'
-        }, options.controllers));
-
-        //routers
-        processDirectory(_.extend({
-            name: 'routers'
-        }, options.routers));
-
-        //routes
-        processDirectory(_.extend({
-            name: 'routes'
-        }, options.routes));
-
-        //events
-        processDirectory(_.extend({
-            name: 'events'
-        }, options.events));
+            var mapped = _.reduce(files, function(hash, file) {
+                hash[file] = file;
+                return hash;
+            }, {});
+            //console.log('\nmapped = ', mapped);
+            var pathReduced = pathReduce(mapped);
+            //console.log('pathReduced = ', pathReduced);
+            var strippedExt = stripExt(pathReduced);
+            //console.log('strippedExt = ', strippedExt);
+            mapRequire(moduleName, strippedExt);
+        });
 
         return $;
     };
