@@ -110,7 +110,7 @@ module.exports = function($) {
     };
 
     $.load = function(baseDir) {
-        baseDir = baseDir || '../..'
+        baseDir = baseDir || path.resolve(__dirname + '/../..');
 
         _.each(map, function(moduleName) {
             var files = glob.sync(baseDir+'/'+moduleName+'/**/*{.js,.yaml,.ejs}', {
