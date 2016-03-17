@@ -52,7 +52,7 @@ module.exports = function($) {
                 splitRefFile(ref, split, file);
             }
         });
-        console.log('loaded', moduleName, module);
+        console.log('loaded', moduleName, _.keys(module));
     };
 
     var pathReduce = function(files) {
