@@ -28,13 +28,16 @@ module.exports = function($) {
         var splitRefFile = function(ref, split, file) {
             if (file.indexOf('.yaml') !== -1) {
                 ref[split] = ref[split] || {};
-                _.extend(ref[split], yamlConfig.readConfig(path.resolve(file)));
-            } else if (file.indexOf('.ejs') !== -1) {
-                var readFile = fs.readFileSync(path.resolve(file), {encoding: 'utf8'});
-                ref[split] = ejs.compile(readFile);
-            } else {
-                ref[split] = require(path.resolve(file));
+                return _.extend(ref[split], yamlConfig.readConfig(path.resolve(file)));
             }
+            if (file.indexOf('.ejs') !== -1) {
+                var readFile = fs.readFileSync(path.resolve(file), {encoding: 'utf8'});
+                return ref[split] = ejs.compile(readFile);
+            }
+            if (file.indexOf('index.js') !== -1) {
+                return;
+            }
+            return ref[split] = require(path.resolve(file));
         };
 
         _.each(files, function(name, file) {
@@ -118,9 +121,7 @@ module.exports = function($) {
         console.log('');
         console.log('LOADING ', baseDir);
         _.each(map, function(moduleName) {
-            var files = glob.sync(baseDir+'/'+moduleName+'/**/*{.js,.yaml,.ejs}', {
-                ignore: baseDir+'/'+moduleName+'/**/index.js'
-            });
+            var files = glob.sync(baseDir+'/'+moduleName+'/**/*{.js,.yaml,.ejs}');
 
             if (!files.length) {
                 return;
