@@ -23,6 +23,8 @@ module.exports = function($) {
     var mapRequire = function(moduleName, files) {
         var module = $[moduleName] || ($[moduleName] = {});
 
+        var log = [];
+
         var splitRefFile = function(ref, split, file) {
             if (file.indexOf('.yaml') !== -1) {
                 ref[split] = ref[split] || {};
@@ -36,6 +38,7 @@ module.exports = function($) {
         };
 
         _.each(files, function(name, file) {
+            log.push(name);
             var splits = name.split('/');
             var ref = module;
             if (splits.length > 1) {
@@ -52,7 +55,7 @@ module.exports = function($) {
                 splitRefFile(ref, split, file);
             }
         });
-        console.log('loaded', moduleName, _.keys(module));
+        console.log('loaded', moduleName, log);
     };
 
     var pathReduce = function(files) {
