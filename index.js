@@ -20,45 +20,48 @@ module.exports = function($) {
         $.server = $.express();
     }
 
-    var mapRequire = function(moduleName, files) {
-        var module = $[moduleName] || ($[moduleName] = {});
-
+    var mapRequire = function(moduleName, dirs) {
         var log = [];
+        _.each(dirs, function(files) {
+            var module = $[moduleName] || ($[moduleName] = {});
 
-        var splitRefFile = function(ref, split, file) {
-            if (file.indexOf('.yaml') !== -1) {
-                ref[split] = ref[split] || {};
-                return _.extend(ref[split], yamlConfig.readConfig(path.resolve(file)));
-            }
-            if (file.indexOf('.ejs') !== -1) {
-                var readFile = fs.readFileSync(path.resolve(file), {encoding: 'utf8'});
-                return ref[split] = ejs.compile(readFile);
-            }
-            if (file.indexOf('index.js') !== -1) {
-                return;
-            }
-            return ref[split] = require(path.resolve(file));
-        };
+            var splitRefFile = function(ref, split, file) {
+                if (file.indexOf('.yaml') !== -1) {
+                    ref[split] = ref[split] || {};
+                    return _.extend(ref[split], yamlConfig.readConfig(path.resolve(file)));
+                }
+                if (file.indexOf('.ejs') !== -1) {
+                    var readFile = fs.readFileSync(path.resolve(file), {encoding: 'utf8'});
+                    return ref[split] = ejs.compile(readFile);
+                }
+                if (file.indexOf('index.js') !== -1) {
+                    return;
+                }
+                return ref[split] = require(path.resolve(file));
+            };
 
-        _.each(files, function(name, file) {
-            log.push(name);
-            var splits = name.split('/');
-            var ref = module;
-            if (splits.length > 1) {
-                _.each(splits, function(split, index) {
-                    split = s.camelize(split);
-                    if (index === splits.length - 1) {
-                        splitRefFile(ref, split, file);
-                    } else {
-                        ref = ref[split] || (ref[split] = {});
-                    }
-                });
-            } else {
-                var split = s.camelize(name);
-                splitRefFile(ref, split, file);
-            }
+            _.each(files, function(name, file) {
+                if (file.indexOf('index.js') === -1) {
+                    log.push(name);
+                }
+                var splits = name.split('/');
+                var ref = module;
+                if (splits.length > 1) {
+                    _.each(splits, function(split, index) {
+                        split = s.camelize(split);
+                        if (index === splits.length - 1) {
+                            splitRefFile(ref, split, file);
+                        } else {
+                            ref = ref[split] || (ref[split] = {});
+                        }
+                    });
+                } else {
+                    var split = s.camelize(name);
+                    splitRefFile(ref, split, file);
+                }
+            });
         });
-        console.log('loaded', moduleName, log);
+        console.log('loaded', moduleName, _.uniq(log));
     };
 
     var pathReduce = function(files) {
@@ -115,28 +118,29 @@ module.exports = function($) {
         return files;
     };
 
-    $.load = function(baseDir) {
-        baseDir = path.resolve(baseDir || (__dirname + '/../..'));
+    $.load = function(dirs) {
+        dirs = dirs || [__dirname + '/../..'];
 
-        console.log('');
-        console.log('LOADING ', baseDir);
         _.each(map, function(moduleName) {
-            var files = glob.sync(baseDir+'/'+moduleName+'/**/*{.js,.yaml,.ejs}');
 
-            if (!files.length) {
-                return;
-            }
-
-            var mapped = _.reduce(files, function(hash, file) {
-                hash[file] = file;
-                return hash;
-            }, {});
-            //console.log('\nmapped = ', mapped);
-            var pathReduced = pathReduce(mapped);
-            //console.log('pathReduced = ', pathReduced);
-            var strippedExt = stripExt(pathReduced);
-            //console.log('strippedExt = ', strippedExt);
-            mapRequire(moduleName, strippedExt);
+            var globbedDirs = [];
+            _.each(dirs, function(dir) {
+                var files = glob.sync(dir+'/'+moduleName+'/**/*{.js,.yaml,.ejs}');
+                if (!files.length) {
+                    return;
+                }
+                var mapped = _.reduce(files, function(hash, file) {
+                    hash[file] = file;
+                    return hash;
+                }, {});
+                //console.log('\nmapped = ', mapped);
+                var pathReduced = pathReduce(mapped);
+                //console.log('pathReduced = ', pathReduced);
+                var strippedExt = stripExt(pathReduced);
+                //console.log('strippedExt = ', strippedExt);
+                globbedDirs.push(strippedExt);
+            });
+            mapRequire(moduleName, globbedDirs);
         });
 
         return $;
