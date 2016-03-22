@@ -130,6 +130,9 @@ $.load = function(dirs) {
     dirs = dirs || [__dirname + '/../..'];
 
     _.each(_.keys($), function(moduleName) {
+        if (['load', 'console', 'start', 'express', 'server'].indexOf(moduleName) !== -1) {
+            return;
+        }
 
         var globbedDirs = [];
         _.each(dirs, function(dir) {
