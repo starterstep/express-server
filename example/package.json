@@ -6,8 +6,8 @@
     "test": "gulp mocha"
   },
   "dependencies": {
+    "express-server": "git://github.com/starterstep/express-server.git",
     "morgan": "1.6.1",
-    "express-session": "1.13.0",
     "body-parser": "1.14.2",
     "cookie-parser": "1.4.1",
     "errorhandler": "1.4.3",
