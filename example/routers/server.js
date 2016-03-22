@@ -1,6 +1,6 @@
-var context = require('../');
+var es = require('express-server');
 
-var router = context.express.Router();
-context.server.use(router);
+var router = es.express.Router();
+es.server.use(router);
 
 module.exports = router;

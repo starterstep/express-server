@@ -1,3 +1,1 @@
-var $ = require('./');
-
-$.load('.').start();
+require('./').load().start();

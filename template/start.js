@@ -1,1 +1,1 @@
-require('./').load().start();
+require('express-server').load().start();

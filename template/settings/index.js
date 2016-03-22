@@ -1,1 +1,1 @@
-module.exports = require('../').settings;
+module.exports = require('express-server').settings;

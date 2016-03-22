@@ -1,1 +1,1 @@
-module.exports = require('../').managers;
+module.exports = require('express-server').managers;

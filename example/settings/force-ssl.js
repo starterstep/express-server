@@ -1,3 +1,3 @@
 module.exports = function() {
-    require('../').server.use(require('express-force-ssl'));
+    require('express-server').server.use(require('express-force-ssl'));
 };

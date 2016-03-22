@@ -1,6 +1,8 @@
-var bus = require('../lib').bus;
-var say = require('../lib').say;
-var WordModel = require('../models').word;
+var es = require('express-server');
+
+var bus = es.lib.bus;
+var say = es.lib.say;
+var WordModel = es.models.word;
 
 var $ = module.exports = {};
 

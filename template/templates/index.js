@@ -1,1 +1,1 @@
-module.exports = require('../').templates;
+module.exports = require('express-server').templates;

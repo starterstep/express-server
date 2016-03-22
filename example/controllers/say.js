@@ -1,7 +1,9 @@
+var es = require('express-server');
+
 var $ = module.exports = {};
 
-var responseHelper = require('../lib').responseHelper;
-var sayManager = require('../managers').say;
+var responseHelper = es.lib.responseHelper;
+var sayManager = es.managers.say;
 
 $.word = function(req, res) {
     sayManager.word(req.params.word, function(err, result) {

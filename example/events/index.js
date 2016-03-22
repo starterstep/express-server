@@ -1,1 +1,1 @@
-module.exports = require('../').events;
+module.exports = require('express-server').events;

@@ -1,4 +1,5 @@
-var config = require('../config');
+var es = require('express-server');
+var config = es.config;
 
 var $ = module.exports = require('mongoose');
 

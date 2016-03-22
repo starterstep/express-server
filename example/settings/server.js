@@ -9,9 +9,9 @@ var favicon = require('serve-favicon');
 var multer = require('multer');
 var errorhandler = require('errorhandler');
 
-var context = require('../');
-var server = context.server;
-var express = context.express;
+var es = require('express-server');
+var server = es.server;
+var express = es.express;
 
 server.set('case sensitive routing', true);
 server.set('port', process.env.PORT || 3000);

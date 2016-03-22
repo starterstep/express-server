@@ -1,4 +1,4 @@
-var mongoose = require('../db').mongoose;
+var mongoose = require('express-server').db.mongoose;
 
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;

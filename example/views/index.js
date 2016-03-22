@@ -1,1 +1,1 @@
-module.exports = require('../').views;
+module.exports = require('express-server').views;

@@ -1,1 +1,1 @@
-module.exports = require('../').schemas;
+module.exports = require('express-server').schemas;

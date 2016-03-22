@@ -1,5 +1,6 @@
-var $ = require('../routers').server;
+var es = require('express-server');
+var sayController = es.controllers.say;
 
-var sayController = require('../controllers').say;
+var $ = es.routers.server;
 
 $.get('/:word', sayController.word);

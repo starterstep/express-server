@@ -1,1 +1,1 @@
-module.exports = require('../').db;
+module.exports = require('express-server').db;

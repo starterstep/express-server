@@ -1,3 +1,3 @@
 module.exports = function() {
-    require('../').server.use(require('express-ejs-layouts'));
+    require('express-server').server.use(require('express-ejs-layouts'));
 };
