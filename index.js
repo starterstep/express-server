@@ -32,6 +32,7 @@ var mapRequire = function(moduleName, dirs) {
     var log = [];
     _.each(dirs, function(files) {
         var module = $[moduleName];
+        var indexes = [];
 
         var splitRefFile = function(ref, split, file) {
             if (file.indexOf('.yaml') !== -1) {
@@ -49,7 +50,9 @@ var mapRequire = function(moduleName, dirs) {
         };
 
         _.each(files, function(name, file) {
-            if (file.indexOf('index.js') === -1) {
+            if (file.indexOf('index.js') !== -1) {
+                indexes.push(file);
+            } else {
                 log.push(name);
             }
             var splits = name.split('/');
@@ -67,6 +70,10 @@ var mapRequire = function(moduleName, dirs) {
                 var split = s.camelize(name);
                 splitRefFile(ref, split, file);
             }
+        });
+
+        _.each(indexes, function(file) {
+            require(path.resolve(file));
         });
     });
     console.log('loaded', moduleName, _.uniq(log));
