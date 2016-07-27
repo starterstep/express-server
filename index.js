@@ -10,6 +10,7 @@ var ejs = require('ejs');
 
 var $ = module.exports = {
     config: {},
+    logs: {},
     db: {},
     templates: {},
     views: {},
@@ -22,7 +23,8 @@ var $ = module.exports = {
     controllers: {},
     routers: {},
     routes: {},
-    events: {}
+    events: {},
+    jobs: {}
 };
 $.express = require('express');
 $.server = $.express();
