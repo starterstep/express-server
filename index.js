@@ -79,7 +79,7 @@ var mapRequire = function(moduleName, dirs) {
             require(path.resolve(file));
         });
     });
-    console.log('loaded', moduleName, _.uniq(log));
+    // console.log('loaded', moduleName, _.uniq(log));
 };
 
 var pathReduce = function(files) {
