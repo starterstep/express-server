@@ -20,6 +20,7 @@ var $ = module.exports = {
     schemas: {},
     models: {},
     managers: {},
+    orchestrators: {},
     controllers: {},
     routers: {},
     routes: {},
