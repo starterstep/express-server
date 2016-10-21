@@ -7,29 +7,15 @@ var s = require('underscore.string');
 var yamlConfig = require('yaml-config');
 var ejs = require('ejs');
 
+var $ = module.exports = {};
 
-var $ = module.exports = {
-    config: {},
-    logs: {},
-    db: {},
-    templates: {},
-    views: {},
-    lib: {},
-    settings: {},
-    plugins: {},
-    schemas: {},
-    models: {},
-    managers: {},
-    orchestrators: {},
-    controllers: {},
-    routers: {},
-    routes: {},
-    events: {},
-    jobs: {}
-};
+var dirs = ['config', 'logs', 'db', 'templates', 'views', 'lib', 'settings', 'plugins', 'schemas', 'models', 'managers', 'orchestrators', 'controllers', 'routers', 'routes', 'events', 'jobs'];
+_.each(dirs, function(dir) {
+    $[dir] = function(){return _.isFunction($[dir].index) && $[dir].index.apply(this,arguments)};
+});
+
 $.express = require('express');
 $.server = $.express();
-
 
 var mapRequire = function(moduleName, dirs) {
     var log = [];
@@ -37,7 +23,7 @@ var mapRequire = function(moduleName, dirs) {
         var module = $[moduleName];
         var indexes = [];
 
-        var splitRefFile = function(ref, split, file) {
+        var splitRefFile = function(ref, split, file, isIndex) {
             if (file.indexOf('.yaml') !== -1) {
                 ref[split] = ref[split] || {};
                 return _.extend(ref[split], yamlConfig.readConfig(path.resolve(file)));
@@ -46,40 +32,52 @@ var mapRequire = function(moduleName, dirs) {
                 var readFile = fs.readFileSync(path.resolve(file), {encoding: 'utf8'});
                 return ref[split] = ejs.compile(readFile);
             }
-            if (file.indexOf('index.js') !== -1) {
-                return;
+
+            var module = require(path.resolve(file));
+            ref[split] = module;
+
+            if (isIndex) {
+                _.extend(ref, module);
             }
-            return ref[split] = require(path.resolve(file));
         };
 
-        _.each(files, function(name, file) {
-            if (file.indexOf('index.js') !== -1) {
-                indexes.push(file);
-            } else {
-                log.push(name);
-            }
+        var doFile = function(name, file, isIndex) {
             var splits = name.split('/');
             var ref = module;
             if (splits.length > 1) {
                 _.each(splits, function(split, index) {
                     split = s.camelize(split);
                     if (index === splits.length - 1) {
-                        splitRefFile(ref, split, file);
+                        splitRefFile(ref, split, file, isIndex);
                     } else {
-                        ref = ref[split] || (ref[split] = {});
+                        var localRef = ref;
+                        ref = ref[split] || (ref[split] = function() {
+                                return _.isFunction(localRef[split].index) && localRef[split].index.apply(this,arguments);
+                            });
                     }
                 });
             } else {
                 var split = s.camelize(name);
-                splitRefFile(ref, split, file);
+                splitRefFile(ref, split, file, isIndex);
             }
+        };
+
+        _.each(files, function(name, file) {
+            if (file.indexOf('index.js') !== -1) {
+                return indexes.push({name:name, file:file});
+            }
+            log.push(name);
+            //console.log('!!!!files loading', name, file);
+            doFile(name, file);
         });
 
-        _.each(indexes, function(file) {
-            require(path.resolve(file));
+        _.each(indexes, function(index) {
+            log.push(index.name);
+            //console.log('!!!!indexes loading', index);
+            doFile(index.name, index.file, true);
         });
     });
-    // console.log('loaded', moduleName, _.uniq(log));
+    //console.log('loaded', moduleName, _.uniq(log));
 };
 
 var pathReduce = function(files) {
