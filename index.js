@@ -9,7 +9,7 @@ var ejs = require('ejs');
 
 var $ = module.exports = {};
 
-var dirs = ['config', 'logs', 'db', 'templates', 'views', 'lib', 'settings', 'plugins', 'schemas', 'models', 'managers', 'orchestrators', 'controllers', 'routers', 'routes', 'events', 'jobs'];
+var dirs = ['config', 'logs', 'db', 'templates', 'views', 'lib', 'helpers', 'settings', 'plugins', 'schemas', 'models', 'managers', 'orchestrators', 'controllers', 'routers', 'routes', 'events', 'jobs'];
 _.each(dirs, function(dir) {
     $[dir] = function(){return _.isFunction($[dir].index) && $[dir].index.apply(this,arguments)};
 });
