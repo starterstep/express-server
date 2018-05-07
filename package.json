@@ -7,7 +7,7 @@
     "test": "cd example && npm run test"
   },
   "dependencies": {
-    "ejs": "2.4.1",
+    "ejs": "2.5.5",
     "underscore": "1.8.3",
     "underscore.string": "3.2.3",
     "yaml-config": "0.3.0",
