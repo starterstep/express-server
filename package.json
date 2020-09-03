@@ -12,7 +12,7 @@
     "underscore.string": "3.2.3",
     "yaml-config": "0.3.0",
     "express": "4.13.3",
-    "moment": "2.11.2",
+    "moment": "2.27.0",
     "glob": "7.0.3"
   },
   "devDependencies": {
