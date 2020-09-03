@@ -18,7 +18,7 @@
     "express-session": "1.13.0",
     "connect-flash": "0.1.1",
     "express-ejs-layouts": "2.0.0",
-    "mongoose": "4.4.2",
+    "mongoose": "5.10.2",
     "mongojs": "2.3.0",
     "connect-mongo": "1.1.0"
   },
