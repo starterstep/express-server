@@ -25,4 +25,4 @@
 	    "indent": [2, 4, { "ignoreComments": true, "SwitchCase": 1 }],
 	    "prefer-template": 2
 	}
-    }
+}
