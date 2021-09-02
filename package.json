@@ -2,6 +2,9 @@
   "name": "express-server",
   "version": "0.0.1",
   "scripts": {
+    "lint-check": "npx eslint .",
+    "lint-fix": "npx eslint --fix .",
+    "lint-fix-staged": "npx lint-staged --verbose",
     "start": "cd example && node start",
     "console": "cd example && node console",
     "test": "cd example && npm run test"
@@ -15,5 +18,18 @@
     "moment": "2.29.1",
     "glob": "7.1.7"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "husky": "^4.3.8",
+    "lint-staged": "^10.5.3",
+    "standard": "^16.0.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint-fix-staged",
+      "pre-push": "npm run test"
+    }
+  },
+  "lint-staged": {
+    "*.js": "npx eslint --fix"
+  }
 }
