@@ -4,10 +4,7 @@
   "scripts": {
     "lint-check": "npx eslint .",
     "lint-fix": "npx eslint --fix .",
-    "lint-fix-staged": "npx lint-staged --verbose",
-    "start": "cd example && node start",
-    "console": "cd example && node console",
-    "test": "cd example && npm run test"
+    "lint-fix-staged": "npx lint-staged --verbose"
   },
   "dependencies": {
     "ejs": "3.1.6",
