@@ -161,8 +161,8 @@ $.load = function (dirs) {
     return $
 }
 
-$.console = function () {
-    nodeConsole($)
+$.console = function (extendFn) {
+    nodeConsole($, extendFn)
     return $
 }
 
