@@ -1,0 +1,28 @@
+{
+	"env": {
+	    "node": true
+	},
+	"extends": [
+	    "standard"
+	],
+	"globals": {
+	    "exports": "writable",
+	    "module": "writable",
+	    "require": "writable"
+	},
+	"ignorePatterns": [
+        "example",
+        "template"
+	],
+	"parserOptions": {
+	    "ecmaVersion": 6,
+	    "sourceType": "script"
+	},
+	"root": true,
+	"rules": {
+	    "arrow-parens": 2,
+	    "curly": [2, "all"],
+	    "indent": [2, 4, { "ignoreComments": true, "SwitchCase": 1 }],
+	    "prefer-template": 2
+	}
+}
