@@ -9,7 +9,7 @@ const ejs = require('ejs')
 
 const $ = module.exports = {}
 
-const dirs = ['config', 'logs', 'db', 'templates', 'views', 'lib', 'helpers', 'settings', 'plugins', 'schemas', 'models', 'managers', 'orchestrators', 'controllers', 'routers', 'routes', 'events', 'jobs']
+const dirs = ['config', 'logs', 'db', 'templates', 'views', 'lib', 'helpers', 'settings', 'plugins', 'schemas', 'models', 'managers', 'orchestrators', 'controllers', 'routers', 'routes', 'events', 'jobs', 'queues']
 _.each(dirs, function (dir) {
     $[dir] = function () { return _.isFunction($[dir].index) && $[dir].index.apply(this, arguments) }
 })
