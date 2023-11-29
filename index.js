@@ -64,7 +64,7 @@ const mapRequire = function (moduleName, dirs) {
 
         _.each(files, function (name, file) {
             if (file.indexOf('index.js') !== -1) {
-                return indexes.push({ name: name, file: file })
+                return indexes.push({ name, file })
             }
             log.push(name)
             // console.log('!!!!files loading', name, file);
